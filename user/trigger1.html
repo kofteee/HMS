@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigger 1 Details Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 40px auto;
+            max-width: 900px;
+    background: #f9f9f9;
+    color: #333;
+}
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        .case {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+            padding: 20px 25px 30px;
+            margin-bottom: 30px;
+        }
+        .case h3 {
+            margin-top: 0;
+            color: #34495e;
+        }
+        .form-label {
+            font-weight: 600;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1.8px solid #ccc;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            border-color: #2980b9;
+            outline: none;
+            box-shadow: 0 0 6px #2980b9aa;
+        }
+        .btn-primary {
+            padding: 9px 18px;
+            border: none;
+            background-color: #2980b9;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1f618d;
+        }
+         .btn-secondary {
+            padding: 9px 18px;
+            border: none;
+            background-color: #95a5a6;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            color: white;
+        }
+        .alert {
+            border-radius: 6px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 0.875em;
+            color: #dc3545;
+        }
+        form.was-validated .form-control:invalid ~ .invalid-feedback,
+        form.was-validated .form-select:invalid ~ .invalid-feedback {
+            display: block;
+        }
+        /* Specific styles for this page */
+        .case p {
+            color: #555;
+        }
+        .try-numbers {
+            font-size: 0.85rem;
+            color: #888;
+            margin-left: auto;
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trigger 1: change_availability_rooms</h1>
+
+    <div class="case">
+        <p>
+            This trigger runs before a new row is inserted into the LocatedIn table and has two main purposes:
+        </p>
+    <ul>
+        <li>To check if the room has reached its maximum capacity.</li>
+        <li>To update the room's availability status if it becomes full.</li>
+    </ul>
+    </div>
+
+    <!-- Case 1 -->
+    <div class="case">
+        <h3>Case 1: Room has available space</h3>
+        <p>The room is not yet full. Inserting a patient should succeed without changing the room's availability.</p>
+
+        <form id="form_case1" method="post" novalidate>
+             <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <label for="patient_id_case1" class="form-label">Patient ID:</label>
+                    <input type="number" id="patient_id_case1" name="patient_id" class="form-control" min="1" required placeholder="Enter Patient ID"/>
+                    <div class="invalid-feedback">Please enter Patient ID.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="room_id_case1" class="form-label">Room ID:</label>
+                    <input type="number" id="room_id_case1" name="room_id" class="form-control" min="1" required placeholder="Enter Room ID"/>
+                     <div class="invalid-feedback">Please enter Room ID.</div>
+                </div>
+                 <div class="col-md-4 d-flex align-items-center">
+                     <button type="submit" class="btn btn-primary"><i class="bi bi-play-circle"></i> Simulate Case 1</button>
+                     <span class="try-numbers ms-3">Try: 572697154, 6</span>
+                 </div>
+        </div>
+             <div id="output_case1" class="mt-3"></div>
+        </form>
+    </div>
+
+    <!-- Case 2 -->
+    <div class="case">
+        <h3>Case 2: Room becomes full after adding this patient</h3>
+        <p>The room has one spot left. After insertion, the room will be full and its availability will be set to 0.</p>
+
+        <form id="form_case2" method="post" novalidate>
+             <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <label for="patient_id_case2" class="form-label">Patient ID:</label>
+                    <input type="number" id="patient_id_case2" name="patient_id" class="form-control" min="1" required placeholder="Enter Patient ID"/>
+                     <div class="invalid-feedback">Please enter Patient ID.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="room_id_case2" class="form-label">Room ID:</label>
+                    <input type="number" id="room_id_case2" name="room_id" class="form-control" min="1" required placeholder="Enter Room ID"/>
+                     <div class="invalid-feedback">Please enter Room ID.</div>
+                </div>
+                 <div class="col-md-4 d-flex align-items-center">
+                     <button type="submit" class="btn btn-primary"><i class="bi bi-play-circle"></i> Simulate Case 2</button>
+                     <span class="try-numbers ms-3">Try: 105950837, 6</span>
+                 </div>
+        </div>
+             <div id="output_case2" class="mt-3"></div>
+        </form>
+    </div>
+
+    <!-- Case 3 -->
+    <div class="case">
+        <h3>Case 3: Room is already full</h3>
+        <p>Trying to add another patient to a room that has already reached its maximum capacity.</p>
+
+        <form id="form_case3" method="post" novalidate>
+             <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <label for="patient_id_case3" class="form-label">Patient ID:</label>
+                    <input type="number" id="patient_id_case3" name="patient_id" class="form-control" min="1" required placeholder="Enter Patient ID"/>
+                     <div class="invalid-feedback">Please enter Patient ID.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="room_id_case3" class="form-label">Room ID:</label>
+                    <input type="number" id="room_id_case3" name="room_id" class="form-control" min="1" required placeholder="Enter Room ID"/>
+                     <div class="invalid-feedback">Please enter Room ID.</div>
+                </div>
+                 <div class="col-md-4 d-flex align-items-center">
+                     <button type="submit" class="btn btn-primary"><i class="bi bi-play-circle"></i> Simulate Case 3</button>
+                     <span class="try-numbers ms-3">Try: 90401050, 6</span>
+                 </div>
+        </div>
+             <div id="output_case3" class="mt-3"></div>
+        </form>
+    </div>
+
+    <p style="text-align: center; margin-top: 20px;">
+        <a href="index.html" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Home Page
+        </a>
+    </p>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function () {
+            'use strict'
+
+            const forms = document.querySelectorAll('form');
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+            } else {
+                            // If form is valid, proceed with AJAX submission
+                            event.preventDefault();
+                            const caseName = form.id.replace('form_', '');
+            const patientId = encodeURIComponent(document.getElementById('patient_id_' + caseName).value);
+            const roomId = encodeURIComponent(document.getElementById('room_id_' + caseName).value);
+                            const outputDiv = document.getElementById('output_' + caseName);
+
+                            // Clear previous messages
+                            outputDiv.innerHTML = '';
+
+            fetch('trigger1_handler.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'case=' + caseName + '&patient_id=' + patientId + '&room_id=' + roomId
+            })
+            .then(response => response.text())
+            .then(data => {
+                                // Display the response from the handler
+                                outputDiv.innerHTML = data;
+            })
+            .catch(error => {
+                                outputDiv.innerHTML = '❌ Error: ' + error;
+            });
+        }
+
+                        form.classList.add('was-validated');
+                    }, false)
+                })
+        })();
+    </script>
+</body>
+</html>
